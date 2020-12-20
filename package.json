@@ -1,0 +1,53 @@
+{
+  "name": "automated-tester",
+  "version": "1.0.0",
+  "description": "Automated tester for testing user submitted solutions using guage tester",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "lint": "standard --env mocha",
+    "lint:fix": "standard --env mocha --fix",
+    "test": "mocha test/**/*.test.js",
+    "cov": "nyc npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:topcoder-product-dev/norns/tc-mm-scorer.git"
+  },
+  "author": "Dushyant Bhalgami",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nyc": "^15.0.0",
+    "pm2": "^3.5.0",
+    "sinon": "^6.3.5",
+    "sinon-chai": "^3.2.0",
+    "standard": "^12.0.1"
+  },
+  "dependencies": {
+    "archiver": "^3.0.0",
+    "aws-sdk": "^2.349.0",
+    "bluebird": "^3.5.1",
+    "config": "^1.21.0",
+    "get-parameter-names": "^0.3.0",
+    "isomorphic-git": "^0.78.2",
+    "joi": "^14.0.0",
+    "lodash": "^4.17.19",
+    "no-kafka": "^3.4.3",
+    "request-promise": "^4.2.4",
+    "rimraf": "^2.6.3",
+    "streamifier": "^0.1.1",
+    "superagent": "^4.0.0-beta.5",
+    "superagent-prefix": "0.0.2",
+    "tar": "^4.4.8",
+    "tc-core-library-js": "github:appirio-tech/tc-core-library-js#v2.6.3",
+    "topcoder-healthcheck-dropin": "^1.0.3",
+    "unzipper": "^0.9.4",
+    "uuid": "^3.3.2",
+    "winston": "^3.1.0"
+  },
+  "engines": {
+    "node": "10.x"
+  }
+}
