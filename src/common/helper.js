@@ -68,6 +68,7 @@ function getApi (token) {
     .agent()
     .use(prefix(config.SUBMISSION_API_URL))
     .set('Authorization', `Bearer ${token}`)
+    .on('error', sanitizeError)
 }
 
 /**
@@ -96,18 +97,6 @@ async function getReviewTypeId (reviewTypeName) {
 }
 
 /**
- * Helper function returning prepared superagent instance for using with challenge API.
- * @param {String} token M2M token value
- * @returns {Object} superagent instance configured with Authorization header and API url prefix
- */
-function getV4Api (token) {
-  return request
-    .agent()
-    .use(prefix(config.CHALLENGE_API_URL))
-    .set('Authorization', `Bearer ${token}`)
-}
-
-/**
  * Helper function returning prepared superagent instance for using with v5 challenge API.
  * @param {String} token M2M token value
  * @returns {Object} superagent instance configured with Authorization header and API url prefix
@@ -117,6 +106,7 @@ function getV5Api (token) {
     .agent()
     .use(prefix(config.CHALLENGE_API_V5_URL))
     .set('Authorization', `Bearer ${token}`)
+    .on('error', sanitizeError)
 }
 
 /**
@@ -178,6 +168,7 @@ async function postError (error, submissionDetails = {}) {
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(reqBody)
+    .on('error', sanitizeError)
 }
 
 /**
@@ -247,6 +238,7 @@ async function zipAndUploadArtifact (
         publicArtifactPayload.artifact.data,
         publicArtifactPayload.artifact.name
       )
+      .on('error', sanitizeError)
   }
 
   // PRIVATE ARTIFACTS
@@ -282,6 +274,7 @@ async function zipAndUploadArtifact (
         privateArtifactPayload.artifact.data,
         privateArtifactPayload.artifact.name
       )
+      .on('error', sanitizeError)
   }
 }
 
@@ -467,12 +460,21 @@ function getTestFrameworkFromChallengeConfig (submissionId) {
   return testFramework
 }
 
+function sanitizeError (error) {
+  logger.debug('Checking error state...')
+  if (_.isObject(error) && error.response) {
+    logger.debug('Sanitizing error...')
+    // Keep only the information that is relevant for debugging
+    error.response = _.pick(error.response, ['error'])
+    logger.logFullError(error)
+  }
+}
+
 module.exports = {
   getM2Mtoken,
   downloadAndUnzipFile,
   getApi,
   getReviewTypeId,
-  getV4Api,
   getChallenge,
   reqSubmission,
   postError,
