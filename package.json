@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "archiver": "^3.0.0",
-    "aws-sdk": "^2.349.0",
+    "aws-sdk": "^2.1000.0",
     "bluebird": "^3.5.1",
     "config": "^1.21.0",
     "get-parameter-names": "^0.3.0",
