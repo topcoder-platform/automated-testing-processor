@@ -31,7 +31,7 @@
     "bluebird": "^3.5.1",
     "config": "^1.21.0",
     "get-parameter-names": "^0.3.0",
-    "isomorphic-git": "^0.78.2",
+    "isomorphic-git": "^1.11.1",
     "joi": "^14.0.0",
     "lodash": "^4.17.19",
     "no-kafka": "^3.4.3",
