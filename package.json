@@ -8,7 +8,9 @@
     "lint": "standard --env mocha",
     "lint:fix": "standard --env mocha --fix",
     "test": "mocha test/**/*.test.js",
-    "cov": "nyc npm test"
+    "cov": "nyc npm test",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -33,7 +35,7 @@
     "get-parameter-names": "^0.3.0",
     "isomorphic-git": "^0.78.2",
     "joi": "^14.0.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "no-kafka": "^3.4.3",
     "request-promise": "^4.2.4",
     "rimraf": "^2.6.3",
@@ -45,9 +47,11 @@
     "topcoder-healthcheck-dropin": "^1.0.3",
     "unzipper": "^0.9.4",
     "uuid": "^3.3.2",
-    "winston": "^3.1.0"
+    "winston": "^3.1.0",
+    "@snyk/protect": "latest"
   },
   "engines": {
     "node": "10.x"
-  }
+  },
+  "snyk": true
 }
