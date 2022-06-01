@@ -24,7 +24,7 @@ DOCKER_TEST_SPEC_MOUNT_PATH
 
 # The git repository access credentials. Leave empty if repository is publicly available
 GIT_USERNAME
-GIT_PASSWORD
+GIT_TOKEN
 
 # Only challenges under this track will be considered. Default value is 'Automated Testing'
 CHALLENGE_SUB_TRACK

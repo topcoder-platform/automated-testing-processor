@@ -320,7 +320,7 @@ async function cloneSpecAndTests (submissionId, codeRepo) {
     url: codeRepo,
     singleBranch: true,
     username: config.git.GIT_USERNAME,
-    password: config.git.GIT_PASSWORD
+    token: config.git.GIT_TOKEN
   })
   logger.info('Cloned successfully')
 }

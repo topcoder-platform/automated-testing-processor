@@ -21,7 +21,7 @@ module.exports = {
   // Git options
   git: {
     GIT_USERNAME: process.env.GIT_USERNAME,
-    GIT_PASSWORD: process.env.GIT_PASSWORD,
+    GIT_TOKEN: process.env.GIT_TOKEN,
     GIT_REPOSITORY_URL: process.env.GIT_REPOSITORY_URL
   },
 

@@ -31,7 +31,7 @@ module.exports = {
         DOCKER_TEST_SPEC_MOUNT_PATH: '`${submissionPath}/artifacts/public:/hostlog`',
 
         GIT_USERNAME: '',
-        GIT_PASSWORD: '',
+        GIT_TOKEN: '',
 
         NODE_ENV: ''
       }
