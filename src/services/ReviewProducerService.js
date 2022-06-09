@@ -1,6 +1,6 @@
-const uuid = require('uuid/v4')
-const helper = require('../common/helper')
-const logger = require('../common/logger')
+const uuid = require("uuid/v4");
+const helper = require("../common/helper");
+const logger = require("../common/logger");
 
 /**
  * Creates a new review record based on the score from Scorer
@@ -14,8 +14,8 @@ class ReviewProducerService {
    * - REVIEW_SCORECARD_ID: The review scorecard id to use, e.g. 30001850
    * - REVIEWER_ID_NAMESPACE: The GUID defining namespace for generating reviewerId as GUID based on the 'sub' value from JWT
    */
-  constructor (config) {
-    this.config = config
+  constructor(config) {
+    this.config = config;
   }
 
   /**
@@ -29,34 +29,50 @@ class ReviewProducerService {
    * @param {Object} metadata Test meta-data
    * @returns Response object returned from 'createReview' API
    */
-  async generateReview (token, submissionId, reviewerId, reviewTypeId, score, status, metadata) {
-    return (await helper
-      .getApi(token)
-      .post('/reviews')
-      .send({
+  async generateReview(
+    token,
+    submissionId,
+    reviewerId,
+    reviewTypeId,
+    score,
+    status,
+    metadata
+  ) {
+    return (
+      await helper.getApi(token).post("/reviews").send({
         submissionId,
         scoreCardId: this.config.REVIEW_SCORECARD_ID,
         reviewerId,
         metadata,
         typeId: reviewTypeId,
         score,
-        status
-      })).body
+        status,
+      })
+    ).body;
   }
 
-  async generateUpdate (token, submissionId, reviewId, reviewerId, typeId, scoreCardId, score, status, metadata) {
-    return (await helper
-      .getApi(token)
-      .put(`/reviews/${reviewId}`)
-      .send({
+  async generateUpdate(
+    token,
+    submissionId,
+    reviewId,
+    reviewerId,
+    typeId,
+    scoreCardId,
+    score,
+    status,
+    metadata
+  ) {
+    return (
+      await helper.getApi(token).put(`/reviews/${reviewId}`).send({
         submissionId,
         scoreCardId,
         reviewerId,
         metadata,
         typeId,
         score,
-        status
-      })).body
+        status,
+      })
+    ).body;
   }
 
   /**
@@ -70,23 +86,49 @@ class ReviewProducerService {
    * @param {Object} reviewObject An existing review, which would result in the review getting updated
    * instead of a new review being created
    */
-  async createReview (submissionId, score, status, metadata, reviewObject) {
-    const token = await helper.getM2Mtoken()
+  async createReview(submissionId, score, status, metadata, reviewObject) {
+    const token = await helper.getM2Mtoken();
     const reviewTypeId = await helper.getReviewTypeId(
       this.config.REVIEW_TYPE_NAME
-    )
-    const reviewerId = uuid()
+    );
+    const reviewerId = uuid();
 
     if (reviewObject) {
-      logger.info(`Updating Review for submission ${submissionId} with score ${score}`)
-      await this.generateUpdate(token, submissionId, reviewObject.id, reviewObject.reviewerId, reviewObject.typeId, reviewObject.scoreCardId, score, status, metadata)
-      logger.info(`Review updated for submission ${submissionId} with score ${score}`)
+      logger.info(
+        `Updating Review for submission ${submissionId} with score ${score}`
+      );
+      await this.generateUpdate(
+        token,
+        submissionId,
+        reviewObject.id,
+        reviewObject.reviewerId,
+        reviewObject.typeId,
+        reviewObject.scoreCardId,
+        score,
+        status,
+        metadata
+      );
+      logger.info(
+        `Review updated for submission ${submissionId} with score ${score}`
+      );
     } else {
-      logger.info(`Creating Review for submission ${submissionId} with score ${score}`)
-      const review = await this.generateReview(token, submissionId, reviewerId, reviewTypeId, score, status, metadata)
-      logger.info(`Created Review for submission ${submissionId} with score ${score}`)
-      return review
+      logger.info(
+        `Creating Review for submission ${submissionId} with score ${score}`
+      );
+      const review = await this.generateReview(
+        token,
+        submissionId,
+        reviewerId,
+        reviewTypeId,
+        score,
+        status,
+        metadata
+      );
+      logger.info(
+        `Created Review for submission ${submissionId} with score ${score}`
+      );
+      return review;
     }
   }
 }
-module.exports = ReviewProducerService
+module.exports = ReviewProducerService;

@@ -30,6 +30,7 @@
     "aws-sdk": "^2.349.0",
     "bluebird": "^3.5.1",
     "config": "^1.21.0",
+    "dotenv": "^16.0.1",
     "get-parameter-names": "^0.3.0",
     "isomorphic-git": "^0.78.2",
     "joi": "^14.0.0",

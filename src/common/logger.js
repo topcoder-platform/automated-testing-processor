@@ -1,52 +1,52 @@
 /**
  * This module contains the logger configuration.
  */
-const _ = require('lodash')
-const Joi = require('joi')
-const util = require('util')
-const config = require('config')
-const getParams = require('get-parameter-names')
-const { createLogger, format, transports } = require('winston')
-const { combine, timestamp, printf, prettyPrint } = format
+const _ = require("lodash");
+const Joi = require("joi");
+const util = require("util");
+const config = require("config");
+const getParams = require("get-parameter-names");
+const { createLogger, format, transports } = require("winston");
+const { combine, timestamp, printf, prettyPrint } = format;
 
 const myFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} ${level}: ${message}`
-})
+  return `${timestamp} ${level}: ${message}`;
+});
 
-const locTransports = []
+const locTransports = [];
 if (!config.DISABLE_LOGGING) {
   locTransports.push(
     new transports.Console({
       format: combine(
         timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss'
+          format: "YYYY-MM-DD HH:mm:ss",
         }),
         prettyPrint(),
         myFormat
-      )
+      ),
     })
-  )
+  );
 }
 
 const logger = createLogger({
   level: config.LOG_LEVEL,
-  transports: locTransports
-})
+  transports: locTransports,
+});
 
 logger.resetTransports = function () {
-  logger.clear()
+  logger.clear();
   logger.add(
     new transports.Console({
       format: combine(
         timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss'
+          format: "YYYY-MM-DD HH:mm:ss",
         }),
         prettyPrint(),
         myFormat
-      )
+      ),
     })
-  )
-}
+  );
+};
 
 logger.addFileTransports = function (logFilePath, submissionId) {
   logger.add(
@@ -54,28 +54,28 @@ logger.addFileTransports = function (logFilePath, submissionId) {
       filename: `${logFilePath}/execution-${submissionId}.log`,
       format: combine(
         timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss'
+          format: "YYYY-MM-DD HH:mm:ss",
         }),
         prettyPrint(),
         myFormat
-      )
+      ),
     })
-  )
+  );
 
   logger.add(
     new transports.File({
       filename: `${logFilePath}/error-${submissionId}.log`,
-      level: 'error',
+      level: "error",
       format: combine(
         timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss'
+          format: "YYYY-MM-DD HH:mm:ss",
         }),
         prettyPrint(),
         myFormat
-      )
+      ),
     })
-  )
-}
+  );
+};
 
 /**
  * Log error details with signature
@@ -85,17 +85,17 @@ logger.addFileTransports = function (logFilePath, submissionId) {
 logger.logFullError = function (err, signature) {
   // eslint-disable-line
   if (!err) {
-    return
+    return;
   }
-  const args = Array.prototype.slice.call(arguments)
-  args.shift()
-  logger.error.apply(logger, args)
-  logger.error(util.inspect(err))
+  const args = Array.prototype.slice.call(arguments);
+  args.shift();
+  logger.error.apply(logger, args);
+  logger.error(util.inspect(err));
   if (!err.logged) {
-    logger.error(err.stack)
+    logger.error(err.stack);
   }
-  err.logged = true
-}
+  err.logged = true;
+};
 
 /**
  * Sanitize object.
@@ -103,18 +103,18 @@ logger.logFullError = function (err, signature) {
  * @returns {Object} the new object with removed properties
  * @private
  */
-function _sanitizeObject (obj) {
+function _sanitizeObject(obj) {
   try {
     return JSON.parse(
       JSON.stringify(obj, (name, value) => {
         if (_.isArray(value) && value.length > 30) {
-          return 'Array(' + value.length + ')'
+          return "Array(" + value.length + ")";
         }
-        return value
+        return value;
       })
-    )
+    );
   } catch (e) {
-    return obj
+    return obj;
   }
 }
 
@@ -124,12 +124,12 @@ function _sanitizeObject (obj) {
  * @param {Array} arr the array with values
  * @private
  */
-function _combineObject (params, arr) {
-  const ret = {}
+function _combineObject(params, arr) {
+  const ret = {};
   _.each(arr, (arg, i) => {
-    ret[params[i]] = arg
-  })
-  return ret
+    ret[params[i]] = arg;
+  });
+  return ret;
 }
 
 /**
@@ -137,32 +137,32 @@ function _combineObject (params, arr) {
  * @param {Object} service the service
  */
 logger.decorateWithLogging = function (service) {
-  if (config.LOG_LEVEL !== 'debug') {
-    return
+  if (config.LOG_LEVEL !== "debug") {
+    return;
   }
   _.each(service, (method, name) => {
-    const params = method.params || getParams(method)
+    const params = method.params || getParams(method);
     service[name] = async function () {
-      logger.debug('ENTER ' + name)
-      logger.debug('input arguments')
-      const args = Array.prototype.slice.call(arguments)
-      logger.debug(util.inspect(_sanitizeObject(_combineObject(params, args))))
+      logger.debug("ENTER " + name);
+      logger.debug("input arguments");
+      const args = Array.prototype.slice.call(arguments);
+      logger.debug(util.inspect(_sanitizeObject(_combineObject(params, args))));
       try {
-        const result = await method.apply(this, arguments)
-        logger.debug('EXIT ' + name)
-        logger.debug('output arguments')
+        const result = await method.apply(this, arguments);
+        logger.debug("EXIT " + name);
+        logger.debug("output arguments");
         if (!_.isNil(result)) {
-          logger.debug('output arguments')
-          logger.debug(util.inspect(_sanitizeObject(result)))
+          logger.debug("output arguments");
+          logger.debug(util.inspect(_sanitizeObject(result)));
         }
-        return result
+        return result;
       } catch (e) {
-        logger.logFullError(e, name)
-        throw e
+        logger.logFullError(e, name);
+        throw e;
       }
-    }
-  })
-}
+    };
+  });
+};
 
 /**
  * Decorate all functions of a service and validate input values
@@ -173,33 +173,33 @@ logger.decorateWithLogging = function (service) {
 logger.decorateWithValidators = function (service) {
   _.each(service, (method, name) => {
     if (!method.schema) {
-      return
+      return;
     }
-    const params = getParams(method)
+    const params = getParams(method);
     service[name] = async function () {
-      const args = Array.prototype.slice.call(arguments)
-      const value = _combineObject(params, args)
-      const normalized = Joi.attempt(value, method.schema)
-      const newArgs = []
+      const args = Array.prototype.slice.call(arguments);
+      const value = _combineObject(params, args);
+      const normalized = Joi.attempt(value, method.schema);
+      const newArgs = [];
       // Joi will normalize values
       // for example string number '1' to 1
       // if schema type is number
-      _.each(params, param => {
-        newArgs.push(normalized[param])
-      })
-      return method.apply(this, newArgs)
-    }
-    service[name].params = params
-  })
-}
+      _.each(params, (param) => {
+        newArgs.push(normalized[param]);
+      });
+      return method.apply(this, newArgs);
+    };
+    service[name].params = params;
+  });
+};
 
 /**
  * Apply logger and validation decorators
  * @param {Object} service the service to wrap
  */
 logger.buildService = function (service) {
-  logger.decorateWithValidators(service)
-  logger.decorateWithLogging(service)
-}
+  logger.decorateWithValidators(service);
+  logger.decorateWithLogging(service);
+};
 
-module.exports = logger
+module.exports = logger;
