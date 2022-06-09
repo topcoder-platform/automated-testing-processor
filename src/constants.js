@@ -1,9 +1,9 @@
 const testingFrameworks = {
-  taiko: 'taiko',
-  gauge: 'gauge',
-  selenium: 'selenium'
-}
+  taiko: "taiko",
+  gauge: "gauge",
+  selenium: "selenium",
+};
 
 module.exports = {
-  testingFrameworks
-}
+  testingFrameworks,
+};
