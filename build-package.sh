@@ -21,7 +21,7 @@ automated_testing_processor_cdpackage() {
 
     cp .env $PACKAGE_LOCATION/${APP_NAME}
     cp -r scripts $PACKAGE_LOCATION/${APP_NAME}
-    cp -r src node_modules config $PACKAGE_LOCATION/${APP_NAME}
+    cp -r package.json package-lock.json src node_modules config $PACKAGE_LOCATION/${APP_NAME}
 
     zip -r $AWS_CD_PACKAGE_NAME $PACKAGE_LOCATION/
 }
