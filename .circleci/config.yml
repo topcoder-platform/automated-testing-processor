@@ -6,8 +6,8 @@ defaults: &defaults
 install_dependency: &install_dependency
   name: Installation of build dependencies.
   command: |
-    apt update
-    apt install -y awscli
+    sudo apt update
+    sudo apt install -y awscli
 
 install_deploysuite: &install_deploysuite
   name: Installation of install_deploysuite.
