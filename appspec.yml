@@ -1,14 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: ./direct.jar
-    destination: /home/direct/direct_backup/
-permissions:
-  - object: /home/direct/direct_backup
-    pattern: "direct.jar"
-    owner: direct
-    group: rvm
+  - source: ./automated-testing-processor
+    destination: /home/ubuntu/
 hooks:
+  AfterInstall:
+    - location: remote-cmd-install-depdendencies.sh
   ApplicationStart:
-    - location: remote-cmd-start-app.sh
-      runas: direct
+    - location: remote-cmd-reload-app.sh

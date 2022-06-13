@@ -15,11 +15,13 @@ automated_testing_processor_cdpackage() {
     PACKAGE_LOCATION="${APP_NAME}"
 
     rm -rf $PACKAGE_LOCATION
-    mkdir $PACKAGE_LOCATION
+    mkdir -p $PACKAGE_LOCATION/${APP_NAME}
 
-    cp .env $PACKAGE_LOCATION/
-    cp -r scripts $PACKAGE_LOCATION/
-    cp -r src node_modules config $PACKAGE_LOCATION/
+    cp appspec.yml $PACKAGE_LOCATION/
+
+    cp .env $PACKAGE_LOCATION/${APP_NAME}
+    cp -r scripts $PACKAGE_LOCATION/${APP_NAME}
+    cp -r src node_modules config $PACKAGE_LOCATION/${APP_NAME}
 
     zip -r $AWS_CD_PACKAGE_NAME $PACKAGE_LOCATION/
 }
