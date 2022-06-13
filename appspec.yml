@@ -9,8 +9,8 @@ permissions:
     group: ubuntu
 hooks:
   AfterInstall:
-    - location: /home/ubuntu/automated-testing-processor/scripts/remote-cmd-install-dependencies.sh
+    - location: remote-cmd-install-dependencies.sh
       runas: ubuntu
   ApplicationStart:
-    - location: /home/ubuntu/automated-testing-processor/scripts/remote-cmd-reload-app.sh
+    - location: remote-cmd-reload-app.sh
       runas: ubuntu
