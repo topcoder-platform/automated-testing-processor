@@ -3,8 +3,14 @@ os: linux
 files:
   - source: ./automated-testing-processor
     destination: /home/ubuntu/
+permissions:
+  - object: /home/ubuntu/automated-testing-processor
+    owner: ubuntu
+    group: ubuntu
 hooks:
   AfterInstall:
-    - location: remote-cmd-install-depdendencies.sh
+    - location: scripts/remote-cmd-install-depdendencies.sh
+      runas: ubuntu
   ApplicationStart:
-    - location: remote-cmd-reload-app.sh
+    - location: scripts/remote-cmd-reload-app.sh
+      runas: ubuntu
