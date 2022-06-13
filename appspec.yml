@@ -9,9 +9,6 @@ permissions:
     owner: direct
     group: rvm
 hooks:
-  BeforeInstall:
-    - location: remote-cmd-stop-app.sh
-      runas: direct
   ApplicationStart:
-    - location: remote-cmd-restart-all.sh
+    - location: remote-cmd-start-app.sh
       runas: direct
