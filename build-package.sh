@@ -9,16 +9,20 @@ then
 fi
 
 VER=`date "+%Y%m%d%H%M"`
-SCRIPTDIR="./scripts"
 
 automated_testing_processor_cdpackage() {
     AWS_CD_PACKAGE_NAME="${APPNAME}-${VER}.zip"
     PACKAGE_LOCATION="${APPNAME}"
 
     rm -rf $PACKAGE_LOCATION
+
+    npm i
     mkdir $PACKAGE_LOCATION
 
     cp .env $PACKAGE_LOCATION/
+    cp -r scripts $PACKAGE_LOCATION/
+    cp -r src node_modules config $PACKAGE_LOCATION/
+
     zip -j $AWS_CD_PACKAGE_NAME $PACKAGE_LOCATION/*
 }
 

@@ -41,6 +41,7 @@ class ReviewProducerService {
     return (
       await helper.getApi(token).post("/reviews").send({
         submissionId,
+        challengeId: "challengeId",
         scoreCardId: this.config.REVIEW_SCORECARD_ID,
         reviewerId,
         metadata,

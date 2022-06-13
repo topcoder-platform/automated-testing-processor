@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source: ./direct.jar
+    destination: /home/direct/direct_backup/
+permissions:
+  - object: /home/direct/direct_backup
+    pattern: "direct.jar"
+    owner: direct
+    group: rvm
+hooks:
+  BeforeInstall:
+    - location: remote-cmd-stop-app.sh
+      runas: direct
+  ApplicationStart:
+    - location: remote-cmd-restart-all.sh
+      runas: direct

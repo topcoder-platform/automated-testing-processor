@@ -44,7 +44,6 @@ build_steps: &build_steps # Initialization.
       name: "Deploy Automated Testing Processor"
       command: |
         source awsenvconf
-        cp -f buildvar-app.conf buildvar.conf
         ./deploy.sh $BUILD_ENV $VER
 jobs:
   # Build & Deploy against development backend
