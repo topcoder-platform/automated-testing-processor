@@ -79,10 +79,6 @@ module.exports = {
     ? Number(process.env.FINAL_TESTING_TIMEOUT)
     : 2 * 60 * 60 * 1000, // 2 Hours
 
-  DOCKER_SOLUTION_MOUNT_PATH:
-    process.env.DOCKER_SOLUTION_MOUNT_PATH ||
-    "`${submissionPath}/code/src:/src`",
-  DOCKER_TEST_SPEC_MOUNT_PATH:
-    process.env.DOCKER_TEST_SPEC_MOUNT_PATH ||
-    "`${submissionPath}/artifacts/public:/hostlog`",
+  DOCKER_SOLUTION_MOUNT_PATH: "`${submissionPath}/code/src:/src`",
+  DOCKET_TEST_SPEC_MOUNT_PATH: "`${submissionPath}/artifacts/public:/hostlog`",
 };
