@@ -1,0 +1,70 @@
+version: 2.1
+defaults: &defaults
+  docker:
+    - image: cimg/node:17.9.1
+
+install_dependency: &install_dependency
+  name: Installation of build dependencies.
+  command: |
+    sudo apt update
+    sudo apt install -y awscli
+
+install_deploysuite: &install_deploysuite
+  name: Installation of install_deploysuite.
+  command: |
+    git clone --branch v1.4 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+    cp ./../buildscript/master_deploy.sh .
+    cp ./../buildscript/buildenv.sh .
+    cp ./../buildscript/awsconfiguration.sh .
+
+build_steps: &build_steps # Initialization.
+  - run: *install_dependency
+  - checkout
+  - run: *install_deploysuite
+  - run:
+      name: "AWS Configuration"
+      command: |
+        ./awsconfiguration.sh $BUILD_ENV
+        source awsenvconf
+  - run:
+      name: Copy environment variables and scripts
+      command: |
+        source awsenvconf
+        ./build-properties.sh -e $BUILD_ENV -k $APP_NAME
+  - run:
+      name: Build Pacakge
+      command: ./build-package.sh $BUILD_ENV
+  - run:
+      name: "Deploy Automated Testing Processor"
+      command: |
+        source awsenvconf
+        ./deploy.sh $BUILD_ENV $VER
+jobs:
+  # Build & Deploy against development backend
+  "build-dev":
+    <<: *defaults
+    environment:
+      APP_NAME: "automated-testing-processor"
+      BUILD_ENV: "DEV"
+    steps: *build_steps
+  "build-prod":
+    <<: *defaults
+    environment:
+      APP_NAME: "automated-testing-processor"
+      BUILD_ENV: "PROD"
+    steps: *build_steps
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-dev:
+          context: org-global
+          filters:
+            branches:
+              only: [dev, feat/ci]
+      - build-prod:
+          context: org-global
+          filters:
+            branches:
+              only: master

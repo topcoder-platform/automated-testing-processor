@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: ./automated-testing-processor
+    destination: /home/ubuntu/automated-testing-processor
+permissions:
+  - object: /home/ubuntu/automated-testing-processor
+    owner: ubuntu
+    group: ubuntu
+hooks:
+  AfterInstall:
+    - location: automated-testing-processor/remote-cmd-install-dependencies.sh
+      runas: ubuntu
+  ApplicationStart:
+    - location: automated-testing-processor/remote-cmd-reload-app.sh
+      runas: ubuntu
