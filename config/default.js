@@ -80,5 +80,5 @@ module.exports = {
     : 2 * 60 * 60 * 1000, // 2 Hours
 
   DOCKER_SOLUTION_MOUNT_PATH: "`${submissionPath}/code/src:/src`",
-  DOCKET_TEST_SPEC_MOUNT_PATH: "`${submissionPath}/artifacts/public:/hostlog`",
+  DOCKER_TEST_SPEC_MOUNT_PATH: "`${submissionPath}/artifacts/public:/hostlog`",
 };
