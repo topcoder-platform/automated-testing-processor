@@ -1,3 +1,4 @@
 #!/bin/bash
 
-sudo npm i
+cd /home/ubuntu/automated-testing-processor
+npm i
